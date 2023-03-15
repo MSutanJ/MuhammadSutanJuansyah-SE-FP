@@ -1,0 +1,117 @@
+MULAI
+READ and WRITE "books" with ARRAY OF STRING
+READ and WRITE "borrowedBooks" with ARRAY OF STRING
+READ and WRITE "borrowedBooksCount" with Number
+READ and WRITE "memberList" with ARRAY OF STRING
+READ and WRITE "memberName" with STRING
+READ and WRITE "option" with NUMBER
+READ and WRITE "i" with NUMBER
+READ and WRITE "judulBuku" with STRING
+
+PROCEDURE mainMenu()
+    PRINT "==== Library App by Muhammad Sutan Juansyah ===="
+    PRINT "1. Lihat Daftar Buku"
+    PRINT "2. Pinjam Buku"
+    PRINT "3. Lihat buku yang dipinjam"
+    PRINT "4. Kembalikan Buku"
+    PRINT "5. Daftar Sebagai Keanggotaan"
+    PRINT "6. Exit"
+    PRINT "Silahkan pilih opsi (1-6):"
+END PROCEDURE
+
+PROCEDURE lihatBuku()
+    FOR i IN books DO
+        PRINT i
+    END FOR
+    CALL MainMenu()
+END PROCEDURE
+
+PROCEDURE PinjamBuku()
+    IF memberName NOT IN memberList THEN
+        PRINT "Anda belum menjadi anggota. Silahkan mendaftar terlebih dahulu."
+        CALL registerAnggota()
+    ELSE
+        PRINT memberName
+        PRINT "Masukkan Judul Buku:"
+        INPUT judulBuku
+        IF judulBuku IN books THEN
+            borrowedBooksCount = borrowedBooksCount + 1
+            borrowedBooks.APPEND(judulBuku)
+            books.REMOVE(judulBuku)
+            PRINT "Buku berhasil dipinjam"
+        ELSE
+            PRINT "Buku tidak tersedia"
+        END IF
+        CALL mainMenu()
+    END IF
+END PROCEDURE
+
+PROCEDURE lihatBukuYangDiPinjam()
+    PRINT "Borrowed books:"
+    IF borrowedBooksCount == 0 THEN
+        PRINT "Tidak ada buku yang dipinjam"
+    ELSE
+        FOR i IN borrowedBooks DO
+            PRINT i
+        END FOR
+    END IF
+    CALL MainMenu()
+END PROCEDURE
+
+PROCEDURE kembalikanBuku()
+    PRINT "Masukkan Nama keanggotaan:"
+    INPUT memberName
+    PRINT "Masukkan Judul Buku"
+    INPUT judulBuku
+    IF judulBuku IN borrowedBooks THEN
+        books.APPEND(judulBuku)
+        borrowedBooks.REMOVE(judulBuku)
+        borrowedBooksCount = borrowedBooksCount - 1
+        PRINT "Buku berhasil dikembalikan"
+    ELSE
+        PRINT "Buku tak ada yang dipinjam"
+    END IF
+    CALL MainMenu()
+END PROCEDURE
+
+PROCEDURE registerAnggota()
+    PRINT "Masukkan nama anda:"
+    INPUT memberName
+    IF memberName IN memberList THEN
+        PRINT "Anda sudah menjadi anggota"
+    ELSE
+        STORE memberName to memberList
+        PRINT "Registrasi Berhasil"
+    END IF
+    CALL MainMenu()
+END PROCEDURE
+
+SET books with ["Buku A", "Buku B", "Buku C", "Buku D"]
+SET borrowedBooks = []
+SET borrowedBooksCount = 0
+SET memberList = []
+
+CALL MainMenu()
+INPUT option
+WHILE option != 6 DO
+    IF option == 1 THEN
+        CALL lihatBuku()
+    ELSE IF option == 2 THEN
+        IF memberName IN memberList THEN
+            CALL PinjamBuku()
+        ELSE
+            PRINT "Anda belum terdaftar sebagai anggota"
+            CALL MainMenu()
+        END IF
+    ELSE IF option == 3 THEN
+        CALL lihatBukuYangDiPinjam()
+    ELSE IF option == 4 THEN
+        CALL kembalikanBuku()
+    ELSE IF option == 5 THEN
+        CALL registerAnggota()
+    ELSE
+        PRINT "Input salah, tolong masukkan input sesuai dengan aturan"
+    END IF
+    INPUT option
+END WHILE
+PRINT "Terimakasih telah menggunakan library app by Muhammad Sutan Juansyah"
