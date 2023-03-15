@@ -115,3 +115,4 @@ WHILE option != 6 DO
     INPUT option
 END WHILE
 PRINT "Terimakasih telah menggunakan library app by Muhammad Sutan Juansyah"
+END
